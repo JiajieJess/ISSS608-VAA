@@ -116,6 +116,8 @@ ul.task-list li input[type="checkbox"] {
   <ul class="collapse">
   <li><a href="#the-task" id="toc-the-task" class="nav-link" data-scroll-target="#the-task">1. The task</a></li>
   </ul></li>
+  <li><a href="#step-by-step-preparation" id="toc-step-by-step-preparation" class="nav-link" data-scroll-target="#step-by-step-preparation">2.Step-by-step preparation</a></li>
+  <li><a href="#the-patterns-reveal-by-the-analytical-visualization-prepared" id="toc-the-patterns-reveal-by-the-analytical-visualization-prepared" class="nav-link" data-scroll-target="#the-patterns-reveal-by-the-analytical-visualization-prepared">3.The patterns reveal by the analytical visualization prepared</a></li>
   </ul>
 </nav>
     </div>
@@ -159,10 +161,97 @@ ul.task-list li input[type="checkbox"] {
 <p>TOD - Type of Dwelling</p>
 <p>Pop - Resident Count</p>
 <p>Time - Time / Period</p>
+</section>
+</section>
+<section id="step-by-step-preparation" class="level1">
+<h1>2.Step-by-step preparation</h1>
+<p>This section details the steps required to produce the age-sex pyramids as described in section 1.</p>
+<p>1)Load the respopagesextod2022.csv file into Tableau Desktop.</p>
+<p><img src="images/Picture1.png" class="img-fluid" width="618"></p>
+<p>2)Click Sheet 1.</p>
+<p><img src="images/Picture2.png" class="img-fluid" width="617"></p>
+<p>3)Because we want to build up the age-sex pyramid, so we need to drag AG in <em>Rows</em>.</p>
+<p><img src="images/Picture3.png" class="img-fluid" width="617"></p>
+<p>4)Click the triangle of AG and then click <em>Sort</em>. Choose <em>descending</em>.</p>
+<p><img src="images/Picture4.png" class="img-fluid" width="992"></p>
+<p><img src="images/Picture5.png" class="img-fluid"></p>
+<p><img src="images/Picture6.png" class="img-fluid"></p>
+<p>5) Drag PA to <em>Column.</em></p>
+<p><img src="images/Picture7.png" class="img-fluid" width="554"></p>
+<p>6) We only need to show nine planning area so we click the triangle of <em>PA</em> and then click <em>Edit Filter</em>. Choose nine planning areas that you want to show from the filter and then click <em>OK</em>. I will explain the chosen reason in the final part. I choose Ang Mo Kio, Bishan, Bukit Timah, Clementi, Jurong East, Marine Parade, Novena, Queenstown and Serangoon.</p>
+<p><img src="images/Picture8.png" class="img-fluid"></p>
+<p><img src="images/Picture9.png" class="img-fluid"></p>
+<p><img src="images/Picture10-01.png" class="img-fluid"></p>
+<p>7)Because we need to show the difference between gender. We need to create new fields for males and females. Because if we drag sex directly to <em>Columns</em>, we can not get the correct result. So, click the triangle below the data source and then click <em>Create Calculated Field…</em></p>
+<p><img src="images/Picture11.png" class="img-fluid"> 8)Enter the name Females and the statement. Click <em>OK</em>.</p>
+<p><img src="images/Picture12.png" class="img-fluid"></p>
+<p>9)Create one more calculate field. Enter the name <em>Males</em> and the statement. Click <em>OK</em>.</p>
+<p><img src="images/Picture13.png" class="img-fluid"></p>
+<p>We can see Females and Males created successfully.</p>
+<p><img src="images/Picture14.png" class="img-fluid"></p>
+<p>10)Drag <em>Males</em> and <em>Females</em> to <em>Columns</em>.</p>
+<p><img src="images/Picture15.png" class="img-fluid" width="619"></p>
+<p>11) Click <em>Entire View</em>. Charts can fill the whole view.</p>
+<p><img src="images/Picture16.png" class="img-fluid"></p>
+<p><img src="images/Picture17.png" class="img-fluid"></p>
+<p>12) Because we need to display the pyramid shape so we need to reverse one of the genders. So move the mouse to Males at the bottom and click the right-hand button of the mouse and choose <em>Edit Axis</em>.</p>
+<p><img src="images/Picture18.png" class="img-fluid"></p>
+<p>13) Click <em>Reverse</em>.</p>
+<p><img src="images/Picture19.png" class="img-fluid"></p>
+<p>It would show pyramids successfully.</p>
+<p><img src="images/Picture20.png" class="img-fluid"></p>
+<p>14) We need to use small-multiple plots to display nine selected planning areas on a single view.</p>
+<p>And here is the reference video that I learned: <a href="https://youtu.be/kWZoa3UfbVs" class="uri">https://youtu.be/kWZoa3UfbVs</a>.</p>
+<p>Click <em>create calculated field</em> and name it as <em>Index</em>. Enter the statement and click <em>OK</em>.</p>
+<p><img src="images/Picture21.png" class="img-fluid"></p>
+<p><img src="images/Picture22.png" class="img-fluid"></p>
+<p>15) Click the triangle of <em>Index</em> and then click <em>convert to Discrete</em>.</p>
+<p><img src="images/Picture23.png" class="img-fluid" width="597"></p>
+<p>16) Because we don’t want to hard code the number of columns, we need to create the parameter. Click <em>Create Parameter</em> and named it <em>n of Columns</em>.</p>
+<p><img src="images/Picture24.png" class="img-fluid"></p>
+<ol start="17" type="1">
+<li>Set the Data type as integer and the current value as 3. And then click <em>OK.</em></li>
+</ol>
+<p><img src="images/Picture25.png" class="img-fluid" width="601"></p>
+<ol start="18" type="1">
+<li>Create one more calculated field and Name it as <em>Columns</em>. Right click the Columns and convert it to discrete.</li>
+</ol>
+<p><img src="images/Picture26.png" class="img-fluid"></p>
+<p><img src="images/Picture27.png" class="img-fluid"></p>
+<p>19) Create one more calculated field and Name it as <em>Rows</em>. Right click the <em>Rows</em> and convert it to discrete.</p>
+<p><img src="images/Picture28.png" class="img-fluid"></p>
+<p><img src="images/Picture29.png" class="img-fluid"></p>
+<p>20) Drag <em>Rows</em> and <em>Columns</em> to <em>Rows</em> and <em>Columns</em> that are above the view.</p>
+<p><img src="images/Picture30.png" class="img-fluid" width="602"></p>
+<p>21) Click <em>compute Using -&gt;PA</em> in <em>Columns</em> and <em>Rows</em> .</p>
+<p><img src="images/Picture31.png" class="img-fluid" width="605"></p>
+<p><img src="images/Picture44.png" class="img-fluid" width="615"></p>
+<p>22) Drag <em>PA</em> which is in the top of the view to <em>Detail</em>.</p>
+<p><img src="images/Picture33.png" class="img-fluid"></p>
+<p><img src="images/Picture34.png" class="img-fluid"></p>
+<p>23) Change pyramids’ colour. Click <em>SUM(Males)-&gt;Colour, SUM(Females)-&gt;Colour.</em></p>
+<p><img src="images/Picture35.png" class="img-fluid" width="597"></p>
+<p><img src="images/Picture36.png" class="img-fluid" width="597"></p>
+<p>24) In order to show some text of numbers in the view, we need to drag <em>Males</em> to SUM(Males) <em>Label</em>. Drag <em>Females</em> to SUM(Females) <em>Label</em>.</p>
+<p><img src="images/Picture37.png" class="img-fluid" width="604"></p>
+<p><img src="images/Picture38.png" class="img-fluid" width="600"></p>
+<p>25) We need to label the planning areas’ names at the top of each area. Right click the view and choose <em>Annotate-&gt;Area</em>. Enter the areas’ names.</p>
+<p><img src="images/Picture39.png" class="img-fluid" width="600"></p>
+<p><img src="images/Picture40.png" class="img-fluid" width="605"></p>
+<p><img src="images/Picture41.png" class="img-fluid" width="601"></p>
+<p>26) Change the name of the view. Double click the <em>sheet 1</em> and enter the name. <img src="images/Picture42.png" class="img-fluid" width="605"></p>
+<p>27) Here is the final view:</p>
+<p><img src="images/Picture43.png" class="img-fluid" width="599"></p>
+</section>
+<section id="the-patterns-reveal-by-the-analytical-visualization-prepared" class="level1">
+<h1>3.The patterns reveal by the analytical visualization prepared</h1>
+<p>From the above visualization, there are several details that need to pay attention to. Firstly, I choose Ang Mo Kio, Bishan, Bukit Timah, Clementi, Jurong East, Marine Parade, Novena, Queenstown, and Serangoon. I choose Ang Mo Kio because here is my home address and Bishan is near my house. I want to explore the population pattern in these areas. Bukit Timah is a rich area that roused my curiosity. There are some elite schools in Clementi and that’s why I want to explore the population pyramid in this area. Property prices in Queenstown are high so I also want to visualize this area. The rest of the areas that I pick randomly because I’m a foreigner so I just choose some areas that I’m not familiar with.</p>
+<p>In addition, from the above visualization view, we can find that Singapore has a relatively small population of children and teenagers, and a larger population in the 25-50 age range. In the group over 90, there are always more women than men. This also reveals several problems: Singapore has a low birth rate and will have a serious aging population in the future. There may not be enough working-age people in the future to support the economy and the growing dependent population. Women have longer life spans.</p>
+<p>For Ang Mo Kio, there are a lot of people living in this area. Maybe there’s a bigger residential area here. For Bukit Timah, The largest group is aged 40 to 50. I guess maybe this is a rich area, the house is relatively expensive, and you need to have certain savings to buy, so the residents are older. For Queenstown, 25 to 55-year-olds make up the bulk of the population.</p>
+<p>In conclusion, the age-sex pyramids reveal several problems: Females have a longer life than males in SG. Singapore has a low birth rate and will have a serious aging population in the future. There may not be enough working-age people in the future to support the economy and the growing dependent population. The population pyramid for each planned area will be slightly different depending on the characteristics of each planned area.</p>
 <pre><code></code></pre>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
