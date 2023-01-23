@@ -1,0 +1,31 @@
+---
+title: "Take Home Exercise 1"
+author: "Xu Jiajie"
+---
+
+# Age-sex pyramid by planning area in SG
+
+## 1. The task
+
+The task is to use age-sex pyramids to reveal the demographic structure of SG at the planning area level, describe the step-by-step preparation, and interpret the observations revealed by the data visualization prepared.
+
+The data source of visualization is Singapore Residents by Planning Area / Subzone, Age Group, Sex and Type of Dwelling, June 2022. The data are available under the page entitled [Geographical distribution](https://www.singstat.gov.sg/find-data/search-by-theme/population/geographic-distribution/latest-data).
+
+Here are some notes about the data:
+
+PA - Planning Area
+
+SZ -- Subzone
+
+AG - Age Group
+
+Sex -- Sex
+
+TOD - Type of Dwelling
+
+Pop - Resident Count
+
+Time - Time / Period
+
+```{}
+```
