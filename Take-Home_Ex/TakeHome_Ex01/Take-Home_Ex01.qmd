@@ -65,8 +65,7 @@ This section details the steps required to produce the age-sex pyramids as descr
 
 7)Because we need to show the difference between gender. We need to create new fields for males and females. Because if we drag sex directly to *Columns*, we can not get the correct result. So, click the triangle below the data source and then click *Create Calculated Field...*
 
-![](images/Picture11.png)
-8)Enter the name Females and the statement. Click *OK*.
+![](images/Picture11.png) 8)Enter the name Females and the statement. Click *OK*.
 
 ![](images/Picture12.png)
 
@@ -118,7 +117,7 @@ Click *create calculated field* and name it as *Index*. Enter the statement and 
 
 ![](images/Picture24.png)
 
-17)	Set the Data type as integer and the current value as 3. And then click *OK.*
+17) Set the Data type as integer and the current value as 3. And then click *OK.*
 
 ![](images/Picture25.png){width="601"}
 
@@ -170,8 +169,7 @@ Click *create calculated field* and name it as *Index*. Enter the statement and 
 
 ![](images/Picture41.png){width="601"}
 
-26\) Change the name of the view. Double click the *sheet 1* and enter the name.
-![](images/Picture42.png){width="605"}
+26\) Change the name of the view. Double click the *sheet 1* and enter the name. ![](images/Picture42.png){width="605"}
 
 27\) Here is the final view:
 
@@ -186,6 +184,3 @@ In addition, from the above visualization view, we can find that Singapore has a
 For Ang Mo Kio, there are a lot of people living in this area. Maybe there's a bigger residential area here. For Bukit Timah, The largest group is aged 40 to 50. I guess maybe this is a rich area, the house is relatively expensive, and you need to have certain savings to buy, so the residents are older. For Queenstown, 25 to 55-year-olds make up the bulk of the population.
 
 In conclusion, the age-sex pyramids reveal several problems: Females have a longer life than males in SG. Singapore has a low birth rate and will have a serious aging population in the future. There may not be enough working-age people in the future to support the economy and the growing dependent population. The population pyramid for each planned area will be slightly different depending on the characteristics of each planned area.
-
-```{}
-```

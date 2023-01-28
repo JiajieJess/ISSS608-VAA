@@ -26,5 +26,12 @@
     "title": "Take Home Exercise 1",
     "section": "",
     "text": "The task is to use age-sex pyramids to reveal the demographic structure of SG at the planning area level, describe the step-by-step preparation, and interpret the observations revealed by the data visualization prepared.\nThe data source of visualization is Singapore Residents by Planning Area / Subzone, Age Group, Sex and Type of Dwelling, June 2022. The data are available under the page entitled Geographical distribution.\nHere are some notes about the data:\nPA - Planning Area\nSZ – Subzone\nAG - Age Group\nSex – Sex\nTOD - Type of Dwelling\nPop - Resident Count\nTime - Time / Period"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex03.html",
+    "href": "In-class_Ex/In-class_Ex03.html",
+    "title": "In-class Exercise",
+    "section": "",
+    "text": "Installing and loading R packages\nTwo packages will be installed and loaded. They are : tidyverse and ggiraph.\n\npacman::p_load(ggiraph,tidyverse)\n\nimporting data\n\nexam_data <- read_csv(\"data/Exam_data.csv\")\n\n\nggplot(data = exam_data,aes(x=MATHS)) +geom_dotplot(dotsize = 0.5)\n\n\n\n\n\np <- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(\n    aes(tooltip = ID),\n    stackgroups = TRUE, \n    binwidth = 1, \n    method = \"histodot\") +\n  scale_y_continuous(NULL, \n                     breaks = NULL)\ngirafe(\n  ggobj = p,\n  width_svg = 6,\n  height_svg = 6*0.618\n)"
   }
 ]
