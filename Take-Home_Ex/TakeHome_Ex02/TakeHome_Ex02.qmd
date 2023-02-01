@@ -55,7 +55,7 @@ When you point to one of the pyramids, it would show the amount of population au
 
 The take-home exercise 1 requires us to display the nine pyramids on one view by using trellis display but this design needs us to use the scrolling bar to see the whole view. It's not really fit for the requirement.
 
-## 2.4 **Sketch of Proposed Design**
+## 2.4 Sketch of Proposed Design
 
 # ![](images/LeecodeSQL(1)_page-0001.jpg)
 
@@ -133,7 +133,7 @@ p <- ggplot(PA_sorted_pop, aes(x = ifelse(Sex == "Males", yes = -Count, no = Cou
   geom_col() +
   scale_x_continuous(breaks = seq(-150000, 150000, 50000), 
                      labels = paste0(as.character(c(seq(150, 0, -50), seq(50, 150, 50))),"k")) +
-  labs (x = "Population", y = "Age", title='Singapore Age-Sex Population Pyramid 2021') +
+  labs (x = "Population", y = "Age", title='Singapore Age-Sex Population Pyramid 2022') +
   theme_bw() +
   theme(axis.ticks.y = element_blank()) +
   scale_fill_manual(values = c("Males" = "lightgreen", "Females" = "lightpink"))+
@@ -152,6 +152,8 @@ ggplotly(p,session="knitr")
 ```
 
 # 4. Learning Points
+
+Take-home exercise 2 remind me to consider the user experiences. Because we want others can understand our charts' meaning so we need to think more from the users' perspective. In addition, I also learned how to use ggplot2 and *face_wrap(）.* Putting different charts on one view can help us to get a better understanding about data.
 
 
 
