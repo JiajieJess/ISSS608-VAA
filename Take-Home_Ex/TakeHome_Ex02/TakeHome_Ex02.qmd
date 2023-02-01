@@ -11,13 +11,13 @@ format: html
 editor: visual
 ---
 
-Remaking peer\'s original design by improving chart\'s clarity and aesthetics and creating an alternative design if needed.
+Remaking peer's original design by improving chart's clarity and aesthetics and creating an alternative design if needed.
 
 # 1. Overview
 
 In this Take-home Exercise 2, I have chosen one of my peer's Take-home Exercise 1 tableau submissions and analysed the charts in terms of clarify and aesthetics. In the same time, I also used R to remake the original design by using data visualisation principles and best practices learnt in previous two classes.
 
-# 2.Critique 
+# 2.Critique
 
 ## 2.1 Original Design
 
@@ -25,9 +25,7 @@ The original design is shown below:
 
 ![](images/image-67167773.png)
 
-![](images/image-185868883.png)
-![](images/image-641660754.png)
-As we all known, the task of Take-home exercise 1 is to reveal the demographic structure of Singapore at planning area level by using age-sex pyramid method. The above design showed the demographic structure successfully. Yet, this design can be improved in terms of following criteria.
+![](images/image-185868883.png) ![](images/image-641660754.png) As we all known, the task of Take-home exercise 1 is to reveal the demographic structure of Singapore at planning area level by using age-sex pyramid method. The above design showed the demographic structure successfully. Yet, this design can be improved in terms of following criteria.
 
 ## 2.2 Clarity
 
@@ -59,7 +57,7 @@ The take-home exercise 1 requires us to display the nine pyramids on one view by
 
 # ![](images/LeecodeSQL(1)_page-0001.jpg)
 
-3. Using R to improve the original visualisation
+3.  Using R to improve the original visualisation
 
 ## 3.1 Step by step description
 
@@ -141,9 +139,9 @@ p <- ggplot(PA_sorted_pop, aes(x = ifelse(Sex == "Males", yes = -Count, no = Cou
 p
 ```
 
-3\) In order to convert the static pyramid to an interactive chart, we can use *ggplotly()* of the plotly library. After using this package, hoving your mouse on the bar, you can see the detail information of the different ages and genders.
+3)  In order to convert the static pyramid to an interactive chart, we can use *ggplotly()* of the plotly library. After using this package, hoving your mouse on the bar, you can see the detail information of the different ages and genders. We also need to use *fig.width* and *fig.height* to adjust the height and width.
 
-```{r}
+```{r,fig.width=35,fig.height=35}
 library(plotly)
 ggplotly(p,session="knitr")
 ```
@@ -154,7 +152,3 @@ ggplotly(p,session="knitr")
 # 4. Learning Points
 
 Take-home exercise 2 remind me to consider the user experiences. Because we want others can understand our charts' meaning so we need to think more from the users' perspective. In addition, I also learned how to use ggplot2 and *face_wrap(）.* Putting different charts on one view can help us to get a better understanding about data.
-
-
-
-
