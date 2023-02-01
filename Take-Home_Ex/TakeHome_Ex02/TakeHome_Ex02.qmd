@@ -104,38 +104,44 @@ sorted_pop
 
 ```
 
-6\) Because the take-home exercise needs us to choose nine planning area. So, base on the original design, I choose
+6\) Because the take-home exercise needs us to choose nine planning areas. So, base on the original design, I choose "Ang Mo Kio", "Bukit Merah", "Bukit Timah", "Hougang", "Jurong East", "Kallang", "Pasir Ris", "Sengkang", "Toa Payoh" nine planning areas. And then display the whole table of nine planning areas.
 
 ```{r}
 PA_sorted_pop <- filter(sorted_pop,PA %in% c("Ang Mo Kio","Bukit Merah","Bukit Timah","Hougang","Jurong East","Kallang","Pasir Ris","Sengkang","Toa Payoh"))
 PA_sorted_pop
 ```
 
-# **3.2.3 绘制年龄-性别人口金字塔**
+## **3.1.1 Plot Age-Sex Population Pyramid**
 
-#### **静态年龄性别人口金字塔**
+Static Age-sex population pyramid
 
-使用**ggplot2**绘制了年龄-性别人口金字塔，如下所示：
+1\) Using ggplot2 to plot the age-sex population pyramid.
 
--   *geom_col()*而不是*geom_bar()*用于创建条形图，因为我们不需要修改数据，并且希望条形的长度代表实际的人口统计数据。
+2\) Changed the color of the bar chart depending on the original design.
 
--   *Base R 函数的ifelse()*将 Male 居民的人口数转换为负数，以便他们的数据将绘制在金字塔的左侧。
+-   *geom_col()* used to create the bar chart.
 
--   *scale_x\_continuous()*用于修改 x 轴上的标签以提供更好的可读性。
+-   *ifelse()* of Base R function was convert population count of Male residents to be negative, so that their data will be plotted on the left side of the pyramid.
 
-    ```{r}
-    p <- ggplot(PA_sorted_pop, aes(x = ifelse(Sex == "Males", yes = -Count, no = Count), 
-                              y = AG, fill = Sex)) + 
-      geom_col() +
-      scale_x_continuous(breaks = seq(-150000, 150000, 50000), 
-                         labels = paste0(as.character(c(seq(150, 0, -50), seq(50, 150, 50))),"k")) +
-      labs (x = "Population", y = "Age", title='Singapore Age-Sex Population Pyramid 2021') +
-      theme_bw() +
-      theme(axis.ticks.y = element_blank()) +
-      scale_fill_manual(values = c("Males" = "lightblue", "Females" = "lightpink"))+
-      facet_wrap(~ PA)
-    p
-    ```
+-   *facet_wrap()* Used to display nine planing area's pyramids on the one view .
+
+-   Changed the color to light-green for males and light-pink for females.
+
+```{r}
+p <- ggplot(PA_sorted_pop, aes(x = ifelse(Sex == "Males", yes = -Count, no = Count), 
+                          y = AG, fill = Sex)) + 
+  geom_col() +
+  scale_x_continuous(breaks = seq(-150000, 150000, 50000), 
+                     labels = paste0(as.character(c(seq(150, 0, -50), seq(50, 150, 50))),"k")) +
+  labs (x = "Population", y = "Age", title='Singapore Age-Sex Population Pyramid 2021') +
+  theme_bw() +
+  theme(axis.ticks.y = element_blank()) +
+  scale_fill_manual(values = c("Males" = "lightgreen", "Females" = "lightpink"))+
+  facet_wrap(~ PA)
+p
+```
+
+3\) In order to convert the static pyramid to an interactive chart, we can use *ggplotly()* of the plotly library. After using this package, hoving your mouse on the bar, you can see the detail information of the different ages and genders.
 
 ```{r}
 library(plotly)
@@ -144,3 +150,9 @@ ggplotly(p,session="knitr")
 
 ```{}
 ```
+
+# 4. Learning Points
+
+
+
+
