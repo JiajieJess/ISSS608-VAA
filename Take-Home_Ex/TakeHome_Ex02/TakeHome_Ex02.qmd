@@ -134,7 +134,7 @@ p <- ggplot(PA_sorted_pop, aes(x = ifelse(Sex == "Males", yes = -Count, no = Cou
   labs (x = "Population", y = "Age", title='Singapore Age-Sex Population Pyramid 2022') +
   theme_bw() +
   theme(axis.ticks.y = element_blank()) +
-  scale_fill_manual(values = c("Males" = "lightgreen", "Females" = "lightpink"))+
+  scale_fill_manual(values = c("Males" = "#7b8b6f", "Females" = "lightpink"))+
   facet_wrap(~ PA)
 p
 ```
