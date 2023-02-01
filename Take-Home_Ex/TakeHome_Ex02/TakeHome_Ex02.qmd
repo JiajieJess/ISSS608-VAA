@@ -123,7 +123,7 @@ Static Age-sex population pyramid
 
 -   *facet_wrap()* Used to display nine planing area's pyramids on the one view .
 
--   Changed the color to light-green for males and light-pink for females.
+-   Changed the color to green for males and light-pink for females.
 
 ```{r}
 p <- ggplot(PA_sorted_pop, aes(x = ifelse(Sex == "Males", yes = -Count, no = Count), 
