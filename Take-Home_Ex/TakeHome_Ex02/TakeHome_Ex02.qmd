@@ -11,6 +11,10 @@ format: html
 editor: visual
 ---
 
+Remaking peer\'s original design by improving chart\'s clarity and aesthetics and creating an alternative design if needed.
+
+# 1. Overview
+
 Installing and loading R packages
 
 Two packages will be installed and loaded. They are : tidyverse and ggiraph.
@@ -92,4 +96,7 @@ PA_sorted_pop
 ```{r}
 library(plotly)
 ggplotly(p,session="knitr")
+```
+
+```{}
 ```
