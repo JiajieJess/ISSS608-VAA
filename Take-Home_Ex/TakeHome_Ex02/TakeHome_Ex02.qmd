@@ -15,27 +15,73 @@ Remaking peer\'s original design by improving chart\'s clarity and aesthetics an
 
 # 1. Overview
 
-Installing and loading R packages
+In this Take-home Exercise 2, I have chosen one of my peer's Take-home Exercise 1 tableau submissions and analysed the charts in terms of clarify and aesthetics. In the same time, I also used R to remake the original design by using data visualisation principles and best practices learnt in previous two classes.
 
-Two packages will be installed and loaded. They are : tidyverse and ggiraph.
+# 2.Critique 
+
+## 2.1 Original Design
+
+The original design is shown below:
+
+![](images/image-67167773.png)
+
+![](images/image-185868883.png)
+![](images/image-641660754.png)
+As we all known, the task of Take-home exercise 1 is to reveal the demographic structure of Singapore at planning area level by using age-sex pyramid method. The above design showed the demographic structure successfully. Yet, this design can be improved in terms of following criteria.
+
+## 2.2 Clarity
+
+### (a) Graph Title
+
+The graph title can deliver the information clearly. But I think it is a bit too long. Maybe can be shorter. For example, can name it as SG Age-Sex Population Pyramids. We don't need to say again we choose nine area because we showed nine pyramids.
+
+## (b) Axes Labeling
+
+The design did not add the axes labels. It would bring some misunderstanding about the data. So I think we can add the "Age" on the left side and the "Population" on the bottom side. It also added the gender labels on the bottom side and I think it's good because it can bring a clear information about the gender differences.
+
+For every pyramid, it has been added the area name label, which is very clear to show the specific area's situation.
+
+## 2.3 Aesthetics
+
+### (a) Alignment- Graph Title
+
+In my opinion, the title aligning the pyramid area would be better than aligning the left side of the view.
+
+### (b) The texts of population amount
+
+When you point to one of the pyramids, it would show the amount of population automatically. So I think the text of the number can be removed.
+
+### (c) The display sequence of pyramids
+
+The take-home exercise 1 requires us to display the nine pyramids on one view by using trellis display but this design needs us to use the scrolling bar to see the whole view. It's not really fit for the requirement.
+
+## 2.4 **Sketch of Proposed Design**
+
+# ![](images/LeecodeSQL(1)_page-0001.jpg)
+
+3. Using R to improve the original visualisation
+
+## 3.1 Step by step description
+
+1\) Installing and loading R packages. Three packages will be installed and loaded. They are : ggiraph, tidyverse and readxl.
 
 ```{r}
 pacman::p_load(ggiraph,tidyverse,readxl)
 ```
 
-Importing data
+2\) Importing data. Data import was accomplished using *read_csv()* of the **readr** package.
 
 ```{r}
 pop <- read_csv("data/respopagesextod2022.csv")
 ```
 
-Read the head data
+3\) Read the head data:
 
 ```{r}
 head(pop)
 ```
 
-首先，我们将按性别和年龄计算新加坡总人口的频率计数。在下面的代码块中，dplyr**包的***group_by()*用于按年龄和性别对订单进行分组。然后，使用**dplyr的summarise** *()*来统计（即n()）居民的数量。
+4\) First, we need to calculate the frequency count of the total population in Singapore by gender(Sex), age(AG), and planning area(PA). In the code chunk, we can use *group_by()* to group the orders by age, gender, and planning area. Afrer that, we can use summarise() of dplyr package to compute the amount of residents.
 
 ```{r}
 freq_pop <- pop %>%
@@ -45,11 +91,7 @@ freq_pop <- pop %>%
 head(freq_pop)
 ```
 
-**排序数据表**
-
-默认情况下，tibble 数据框的值根据第一列的值排序。在这种情况下，值按年龄组的字母数字顺序排序。
-
-因此，我们将根据原始数据集中分配的分类年龄组对数据进行排序。此任务首先通过使用*mutate()*更改顺序执行，然后通过**dplyr**包的*arrange()排序。*
+5\) We need to sort the data based on the categorical age group assigned in the original dataset. We can use *mutate()* to change the order and then use arrange() of dplyr package to sort. And then display the hold table.
 
 ```{r}
 order <- c("0_to_4", "5_to_9", "10_to_14", "15_to_19", "20_to_24", "25_to_29", "30_to_34", "35_to_39", "40_to_44", "45_to_49", "50_to_54", "55_to_59", "60_to_64", "65_to_69", "70_to_74", "75_to_79", "80_to_84", "85_to_89", "90_and_over")
@@ -62,8 +104,10 @@ sorted_pop
 
 ```
 
+6\) Because the take-home exercise needs us to choose nine planning area. So, base on the original design, I choose
+
 ```{r}
-PA_sorted_pop <- filter(sorted_pop,PA %in% c("Ang Mo Kio","Bedok","Bishan","Boon Lay","Woodlands","Rochor","Sengkang","Queenstown","Punggol"))
+PA_sorted_pop <- filter(sorted_pop,PA %in% c("Ang Mo Kio","Bukit Merah","Bukit Timah","Hougang","Jurong East","Kallang","Pasir Ris","Sengkang","Toa Payoh"))
 PA_sorted_pop
 ```
 
