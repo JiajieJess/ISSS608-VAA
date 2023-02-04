@@ -146,9 +146,6 @@ library(plotly)
 ggplotly(p,session="knitr")
 ```
 
-```{}
-```
-
 # 4. Learning Points
 
 Take-home exercise 2 remind me to consider the user experiences. Because we want others can understand our charts' meaning so we need to think more from the users' perspective. In addition, I also learned how to use ggplot2 and *face_wrap(）.* Putting different charts on one view can help us to get a better understanding about data.
