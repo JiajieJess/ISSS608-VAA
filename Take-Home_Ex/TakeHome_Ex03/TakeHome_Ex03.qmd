@@ -3,15 +3,15 @@ title: "TakeHome_Ex03"
 author: "Xu Jiajie"
 ---
 
-# 1.0 Task
+## 1. Task
 
 In this take-home exercise, I need to uncover the salient patterns of the resale prices of public housing. We need to focus on 3-Room, 4-Room, and 5-room types. I would focus on different factors' influence on resale price and after that, I would focus on analyzing the resale price from one type of house.
 
-# 2.0 The data
+## 2.The data
 
 ***Resale flat princes based on registration date from Jan-2017 onwards*** should be used to prepare the analytical visualization. It is available at [Data.gov.sg](https://data.gov.sg/).
 
-# 3.0 Import the dataset and prepare the data
+## 3. Import the dataset and prepare the data
 
 3.1 Installing and loading the required libraries
 
@@ -51,7 +51,7 @@ Flat_resale3
 
 ## 4. Creating the Visualisation
 
-4.1 I want to compare differnt house type's resale_price's median. But I need to decrease the influence of house size. So, I create one more column to store the average price/m² and named it AvgPrice.
+4.1 I want to compare different house type's resale_price's median. But I need to decrease the influence of house size. So, I create one more column to store the average price/m² and named it AvgPrice.
 
 ```{r}
 Flat_resale4 <- mutate(Flat_resale3,AvgPrice=resale_price/floor_area_sqm)
@@ -113,7 +113,7 @@ From above result, we can see that P\<0.05. So we can reject H0. So, AvgPrice de
 
 4.5 Exploring the relationship between resale_price and storey_range.
 
-In order to explore more about the resale_price and storey_range.
+In order to explore more about the resale_price and storey_range. We try the Significant Test of Association .
 
 ```{r}
 exam1 <- Flat_resale4 %>% 
@@ -160,7 +160,17 @@ ggplot(data=Flat_resale6,aes(x=reorder(town,median_price),y=median_price))+
 
 From above data and chart, we can find that some towns have a really high median of resale_price, although all of them are 4-room house. We can explore step further.
 
-5.3 Visualizing the uncertainty of point estimates
+5.3 Exploring the relationship between the resale_prize and floor_area_sqm.
+
+We want to draw the scatter plot to explore the relationship .
+
+```{r}
+ggplot(data=Flat_resale5, aes(x=floor_area_sqm, y=resale_price)) + geom_point(size=2,color="red")
+```
+
+From above scatter plot, we can't see there is any correlation . So we do not need to explore for next steps.
+
+5.4 Visualizing the uncertainty of point estimates based on the town.
 
 ```{r}
 my_sum <- Flat_resale5 %>%
@@ -198,28 +208,16 @@ ggplot(my_sum) +
           resale_price score by rac")
 ```
 
-**Model Diagnostic: checking normality assumption**
+## 6. The salient pattern
 
-In the code chunk, [*check_normality()*](https://easystats.github.io/performance/reference/check_normality.html) of [**performance**](https://easystats.github.io/performance/) package.
+Here is a conclusion that I learn from this analysis practice.
 
-```{r}
+a\. In the same area of house, the price of 4-room type house would be more expensive than other types.
 
-area_price <- lm(floor_area_sqm ~resale_price , data = Flat_resale5)
-```
+b.The storey would influence the price of the house. Generally, the higher storey of the house that need to pay more money to buy.
 
-```{r}
-check_n <- check_normality(area_price)
-```
+c\. In SG, Central area and queen's town's houses are more expensive than other district， expecially the Central area. the resale price in most of areas are between 490000-510000.
 
-```{r}
-plot(check_n)
-```
+d\. There is no obvious correlation between resale_prize and floor_area_sqm, which is unexpected.
 
-```{r}
-ggscatterstats(
-  data = Flat_resale5,
-  x =floor_area_sqm ,
-  y = resale_price,
-  marginal = FALSE,
-  )
-```
+e\. From the standard error chart, we can know that those are the same type house but there are some price gaps.
