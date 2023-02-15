@@ -195,6 +195,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#import-the-dataset-and-prepare-the-data" id="toc-import-the-dataset-and-prepare-the-data" class="nav-link" data-scroll-target="#import-the-dataset-and-prepare-the-data">3.0 Import the dataset and prepare the data</a>
   <ul class="collapse">
   <li><a href="#creating-the-visualisation" id="toc-creating-the-visualisation" class="nav-link" data-scroll-target="#creating-the-visualisation">4. Creating the Visualisation</a></li>
+  <li><a href="#exploring-one-of-house-type-4-room-type." id="toc-exploring-one-of-house-type-4-room-type." class="nav-link" data-scroll-target="#exploring-one-of-house-type-4-room-type.">5. Exploring one of house type: 4-Room type.</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -443,8 +444,8 @@ storey_range46 TO 48  storey_range49 TO 51
 </div>
 </div>
 <p>From above result, we can see that P&lt;0.05. So we can reject H0. So, AvgPrice depends on the floor. The height of the floor affects the average price.</p>
-<p>4.5 In order to explore the</p>
-<p><strong>Significant Test of Association (Depedence) : <em>ggbarstats()</em> methods</strong></p>
+<p>4.5 Exploring the relationship between resale_price and storey_range.</p>
+<p>In order to explore more about the resale_price and storey_range.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>exam1 <span class="ot">&lt;-</span> Flat_resale4 <span class="sc">%&gt;%</span> </span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">AvgPrice_bin =</span> </span>
@@ -460,7 +461,12 @@ storey_range46 TO 48  storey_range49 TO 51
 <p><img src="TakeHome_Ex03_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>In order to 单一房型的关系：取四房的</p>
+<p>From above chart, we can see that before storey 37, the higher storey , the green color occupied more. Which means the higher storey, the higher AvgPrice.</p>
+</section>
+<section id="exploring-one-of-house-type-4-room-type." class="level2">
+<h2 class="anchored" data-anchor-id="exploring-one-of-house-type-4-room-type.">5. Exploring one of house type: 4-Room type.</h2>
+<p>Because this house type is very popular in SG so we want to explore more about this type.</p>
+<p>5.1 Data prepare: Filter out the 4-Room type data.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>Flat_resale5 <span class="ot">&lt;-</span> <span class="fu">filter</span>(Flat_resale4,flat_type<span class="sc">==</span><span class="st">"4 ROOM"</span>)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>Flat_resale5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -484,7 +490,8 @@ storey_range46 TO 48  storey_range49 TO 51
 #   ⁶​lease_commence_date</code></pre>
 </div>
 </div>
-<p>不同地区房价的中位数</p>
+<p>5.2 The median of resale_price in different towns.</p>
+<p>In order to explore the price in different towns, we need to group by every town and calculate the median of resale_price:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>Flat_resale6 <span class="ot">&lt;-</span> Flat_resale5 <span class="sc">%&gt;%</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>                <span class="fu">group_by</span>(town) <span class="sc">%&gt;%</span></span>
@@ -514,29 +521,130 @@ storey_range46 TO 48  storey_range49 TO 51
 <p><img src="TakeHome_Ex03_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><strong>Model Diagnostic: checking normality assumption</strong></p>
-<p>In the code chunk, <a href="https://easystats.github.io/performance/reference/check_normality.html"><em>check_normality()</em></a> of <a href="https://easystats.github.io/performance/"><strong>performance</strong></a> package.</p>
+<p>From above data and chart, we can find that some towns have a really high median of resale_price, although all of them are 4-room house. We can explore step further.</p>
+<p>5.3 Visualizing the uncertainty of point estimates</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>area_price <span class="ot">&lt;-</span> <span class="fu">lm</span>(floor_area_sqm <span class="sc">~</span>resale_price , <span class="at">data =</span> Flat_resale5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>my_sum <span class="ot">&lt;-</span> Flat_resale5 <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(town) <span class="sc">%&gt;%</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n=</span><span class="fu">n</span>(),</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean=</span><span class="fu">mean</span>(resale_price),</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd=</span><span class="fu">sd</span>(resale_price)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">se=</span>sd<span class="sc">/</span><span class="fu">sqrt</span>(n<span class="dv">-1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>check_n <span class="ot">&lt;-</span> <span class="fu">check_normality</span>(area_price)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(my_sum), <span class="at">format =</span> <span class="st">'html'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<table>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> town </th>
+   <th style="text-align:right;"> n </th>
+   <th style="text-align:right;"> mean </th>
+   <th style="text-align:right;"> sd </th>
+   <th style="text-align:right;"> se </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> ANG MO KIO </td>
+   <td style="text-align:right;"> 305 </td>
+   <td style="text-align:right;"> 599339.7 </td>
+   <td style="text-align:right;"> 172944.64 </td>
+   <td style="text-align:right;"> 9919.055 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BEDOK </td>
+   <td style="text-align:right;"> 462 </td>
+   <td style="text-align:right;"> 508590.4 </td>
+   <td style="text-align:right;"> 101857.56 </td>
+   <td style="text-align:right;"> 4743.979 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BISHAN </td>
+   <td style="text-align:right;"> 206 </td>
+   <td style="text-align:right;"> 640889.7 </td>
+   <td style="text-align:right;"> 103639.45 </td>
+   <td style="text-align:right;"> 7238.493 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BUKIT BATOK </td>
+   <td style="text-align:right;"> 362 </td>
+   <td style="text-align:right;"> 525035.7 </td>
+   <td style="text-align:right;"> 101134.38 </td>
+   <td style="text-align:right;"> 5322.862 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BUKIT MERAH </td>
+   <td style="text-align:right;"> 358 </td>
+   <td style="text-align:right;"> 716379.4 </td>
+   <td style="text-align:right;"> 154082.78 </td>
+   <td style="text-align:right;"> 8154.925 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BUKIT PANJANG </td>
+   <td style="text-align:right;"> 462 </td>
+   <td style="text-align:right;"> 480776.2 </td>
+   <td style="text-align:right;"> 54351.37 </td>
+   <td style="text-align:right;"> 2531.396 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(check_n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(my_sum) <span class="sc">+</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x=</span>town, </span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">ymin=</span>mean<span class="sc">-</span>se, </span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">ymax=</span>mean<span class="sc">+</span>se), </span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">width=</span><span class="fl">0.2</span>, </span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour=</span><span class="st">"black"</span>, </span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha=</span><span class="fl">0.9</span>, </span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">size=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(aes</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>           (<span class="at">x=</span>town, </span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">y=</span>mean), </span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>           <span class="at">stat=</span><span class="st">"identity"</span>, </span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">color=</span><span class="st">"red"</span>,</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>           <span class="at">size =</span> <span class="fl">1.5</span>,</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>           <span class="at">alpha=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Standard error of mean </span></span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a><span class="st">          resale_price score by rac"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` instead.</code></pre>
+</div>
 <div class="cell-output-display">
 <p><img src="TakeHome_Ex03_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p><strong>Model Diagnostic: checking normality assumption</strong></p>
+<p>In the code chunk, <a href="https://easystats.github.io/performance/reference/check_normality.html"><em>check_normality()</em></a> of <a href="https://easystats.github.io/performance/"><strong>performance</strong></a> package.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggscatterstats</span>(</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> Flat_resale5,</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span>floor_area_sqm ,</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> resale_price,</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">marginal =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>area_price <span class="ot">&lt;-</span> <span class="fu">lm</span>(floor_area_sqm <span class="sc">~</span>resale_price , <span class="at">data =</span> Flat_resale5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>check_n <span class="ot">&lt;-</span> <span class="fu">check_normality</span>(area_price)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(check_n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="TakeHome_Ex03_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+<p><img src="TakeHome_Ex03_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggscatterstats</span>(</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> Flat_resale5,</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span>floor_area_sqm ,</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> resale_price,</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">marginal =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="TakeHome_Ex03_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 

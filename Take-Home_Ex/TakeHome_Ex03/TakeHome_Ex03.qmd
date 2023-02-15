@@ -111,9 +111,9 @@ ggbetweenstats(
 
 From above result, we can see that P\<0.05. So we can reject H0. So, AvgPrice depends on the floor. The height of the floor affects the average price.
 
-4.5 In order to explore the
+4.5 Exploring the relationship between resale_price and storey_range.
 
-**Significant Test of Association (Depedence) : *ggbarstats()* methods**
+In order to explore more about the resale_price and storey_range.
 
 ```{r}
 exam1 <- Flat_resale4 %>% 
@@ -129,14 +129,22 @@ ggbarstats(exam1,
            y = storey_range)
 ```
 
-In order to 单一房型的关系：取四房的
+From above chart, we can see that before storey 37, the higher storey , the green color occupied more. Which means the higher storey, the higher AvgPrice.
+
+## 5. Exploring one of house type: 4-Room type.
+
+Because this house type is very popular in SG so we want to explore more about this type.
+
+5.1 Data prepare: Filter out the 4-Room type data.
 
 ```{r}
 Flat_resale5 <- filter(Flat_resale4,flat_type=="4 ROOM")
 Flat_resale5
 ```
 
-不同地区房价的中位数
+5.2 The median of resale_price in different towns.
+
+In order to explore the price in different towns, we need to group by every town and calculate the median of resale_price:
 
 ```{r}
 Flat_resale6 <- Flat_resale5 %>%
@@ -150,11 +158,52 @@ ggplot(data=Flat_resale6,aes(x=reorder(town,median_price),y=median_price))+
       geom_bar(stat = "identity")
 ```
 
+From above data and chart, we can find that some towns have a really high median of resale_price, although all of them are 4-room house. We can explore step further.
+
+5.3 Visualizing the uncertainty of point estimates
+
+```{r}
+my_sum <- Flat_resale5 %>%
+  group_by(town) %>%
+  summarise(
+    n=n(),
+    mean=mean(resale_price),
+    sd=sd(resale_price)
+    ) %>%
+  mutate(se=sd/sqrt(n-1))
+```
+
+```{r}
+knitr::kable(head(my_sum), format = 'html')
+```
+
+```{r}
+ggplot(my_sum) +
+  geom_errorbar(
+    aes(x=town, 
+        ymin=mean-se, 
+        ymax=mean+se), 
+    width=0.2, 
+    colour="black", 
+    alpha=0.9, 
+    size=0.5) +
+  geom_point(aes
+           (x=town, 
+            y=mean), 
+           stat="identity", 
+           color="red",
+           size = 1.5,
+           alpha=1) +
+  ggtitle("Standard error of mean 
+          resale_price score by rac")
+```
+
 **Model Diagnostic: checking normality assumption**
 
 In the code chunk, [*check_normality()*](https://easystats.github.io/performance/reference/check_normality.html) of [**performance**](https://easystats.github.io/performance/) package.
 
 ```{r}
+
 area_price <- lm(floor_area_sqm ~resale_price , data = Flat_resale5)
 ```
 
