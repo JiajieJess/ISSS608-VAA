@@ -1,0 +1,176 @@
+---
+title: "TakeHome_Ex03"
+author: "Xu Jiajie"
+---
+
+# 1.0 Task
+
+In this take-home exercise, I need to uncover the salient patterns of the resale prices of public housing. We need to focus on 3-Room, 4-Room, and 5-room types. I would focus on different factors' influence on resale price and after that, I would focus on analyzing the resale price from one type of house.
+
+# 2.0 The data
+
+***Resale flat princes based on registration date from Jan-2017 onwards*** should be used to prepare the analytical visualization. It is available at [Data.gov.sg](https://data.gov.sg/).
+
+# 3.0 Import the dataset and prepare the data
+
+3.1 Installing and loading the required libraries
+
+```{r}
+pacman::p_load(tidyverse, patchwork, ggthemes, hrbrthemes, ggrepel, ggiraph, ggstatsplot, PMCMRplus, performance, parameters, see, plotly, factoextra,ggplot2,forcats,dendextend,heatmaply,pheatmap,rmarkdown)
+```
+
+3.2 Importing the dataset and preparing the data
+
+```{r}
+Flat_resale <- read_csv("data/2017-2022.csv")
+Flat_resale
+```
+
+3.3 Because we need to focus on 3-room, 4-room, and 5-room house type so I fiter out the data that we need.
+
+```{r}
+Flat_resale1 <- filter(Flat_resale,flat_type=="3 ROOM"|flat_type=="4 ROOM"|flat_type=="5 ROOM")
+```
+
+```{r}
+Flat_resale1
+```
+
+3.4 The task require us to analysis 2022's data so I filter 2022's data. The following steps can filter out the data that we need.
+
+```{r}
+Flat_resale2 <- Flat_resale1 %>% 
+  separate(month, c("year", "months"), "-")
+Flat_resale2
+```
+
+```{r}
+Flat_resale3 <- filter(Flat_resale2,year=="2022")
+Flat_resale3
+```
+
+## 4. Creating the Visualisation
+
+4.1 I want to compare differnt house type's resale_price's median. But I need to decrease the influence of house size. So, I create one more column to store the average price/m² and named it AvgPrice.
+
+```{r}
+Flat_resale4 <- mutate(Flat_resale3,AvgPrice=resale_price/floor_area_sqm)
+Flat_resale4
+```
+
+4.2 Two-sample mean test:
+
+In the code chunk below, [**ggbetweenstats()**](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html) is used to build a visual for two-sample mean test of AvgPrice by house types.
+
+```{r}
+ggbetweenstats(
+  data = Flat_resale4,
+  x =flat_type, 
+  y =AvgPrice,
+  type = "np",
+  messages = FALSE
+)
+```
+
+From above chart, it is easy to find that 4-room's AvgPrice is higher than others. It means in the same house size, 4-room house would more expensive than others and the 3-room house is more expensive than 5-room house.
+
+4.3 checking normality assumption between AvgPrice and storey_range.
+
+```{r}
+model1 <- lm(AvgPrice ~storey_range , data = Flat_resale4)
+model1
+```
+
+```{r}
+check_n <- check_normality(model1)
+```
+
+```{r}
+plot(check_n)
+```
+
+4.4 Oneway ANOVA Test: Do a ANOVA Test to verify that is there any difference in AvgPrice based on different storeys.
+
+H0: There is irrelevant between AvgPrice and storey_range.
+
+H1: There is relevant between AvgPrice and storey_range.
+
+```{r}
+ggbetweenstats(
+  data = Flat_resale4,
+  x = storey_range, 
+  y = AvgPrice,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE
+)
+```
+
+From above result, we can see that P\<0.05. So we can reject H0. So, AvgPrice depends on the floor. The height of the floor affects the average price.
+
+4.5 In order to explore the
+
+**Significant Test of Association (Depedence) : *ggbarstats()* methods**
+
+```{r}
+exam1 <- Flat_resale4 %>% 
+  mutate(AvgPrice_bin = 
+           cut(AvgPrice, 
+               breaks = c(0,2000,4000,6000,8000))
+)
+```
+
+```{r}
+ggbarstats(exam1, 
+           x = AvgPrice_bin, 
+           y = storey_range)
+```
+
+In order to 单一房型的关系：取四房的
+
+```{r}
+Flat_resale5 <- filter(Flat_resale4,flat_type=="4 ROOM")
+Flat_resale5
+```
+
+不同地区房价的中位数
+
+```{r}
+Flat_resale6 <- Flat_resale5 %>%
+                group_by(town) %>%
+                summarize(median_price = median(resale_price))
+Flat_resale6
+```
+
+```{r}
+ggplot(data=Flat_resale6,aes(x=reorder(town,median_price),y=median_price))+
+      geom_bar(stat = "identity")
+```
+
+**Model Diagnostic: checking normality assumption**
+
+In the code chunk, [*check_normality()*](https://easystats.github.io/performance/reference/check_normality.html) of [**performance**](https://easystats.github.io/performance/) package.
+
+```{r}
+area_price <- lm(floor_area_sqm ~resale_price , data = Flat_resale5)
+```
+
+```{r}
+check_n <- check_normality(area_price)
+```
+
+```{r}
+plot(check_n)
+```
+
+```{r}
+ggscatterstats(
+  data = Flat_resale5,
+  x =floor_area_sqm ,
+  y = resale_price,
+  marginal = FALSE,
+  )
+```
