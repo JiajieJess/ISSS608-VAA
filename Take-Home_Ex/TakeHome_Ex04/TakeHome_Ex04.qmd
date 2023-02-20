@@ -1,0 +1,27 @@
+---
+title: "TakeHome_Ex04"
+author: "Xu Jiajie"
+---
+
+```{r}
+pacman::p_load(ggplot2, tidyverse,readxl)
+```
+
+```{r}
+data1 <- read_excel("data/outputFile.xlsx",sheet='T1',range = 'A10:UT129')
+data1
+```
+
+```{r}
+data1A <- data1 %>% 
+  separate("Data Series", c("Place", "money"), " ")
+data1A
+```
+
+```{r}
+  data1A |>
+  select(Place:"2020 Jan") |>
+  filter(money=="(Million") |>
+  head(n=5) |>
+  knitr::kable()
+```

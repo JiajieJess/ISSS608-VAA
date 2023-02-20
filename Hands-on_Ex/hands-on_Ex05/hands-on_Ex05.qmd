@@ -1,0 +1,76 @@
+---
+title: "Hands-on_Ex05"
+author: "Xu Jiajie"
+---
+
+```{r}
+pacman::p_load(tidyverse,ggtern,dplyr,plotly)
+```
+
+```{r}
+pop_data <- read_csv("data/respopagsex2000to2018_tidy.csv") 
+```
+
+```{r}
+agpop_mutated <- pop_data %>%
+  mutate(`Year` = as.character(Year))%>%
+  pivot_wider(names_from = AG, 
+              values_from = Population) %>%
+  mutate(YOUNG = rowSums(.[4:8]))%>%
+  mutate(ACTIVE = rowSums(.[9:16]))  %>%
+  mutate(OLD = rowSums(.[17:21])) %>%
+  mutate(TOTAL = rowSums(.[22:24])) %>%
+  filter(Year == 2018)%>%
+  filter(TOTAL > 0)
+```
+
+```{r}
+ggtern(data=agpop_mutated,aes(x=YOUNG,y=ACTIVE, z=OLD)) +
+  geom_point()
+```
+
+```{r}
+ggtern(data=agpop_mutated, aes(x=YOUNG,y=ACTIVE, z=OLD)) +
+  geom_point() +
+  labs(title="Population structure, 2015") +
+  theme_rgbw()
+```
+
+```{r}
+label <- function(txt) {
+  list(
+    text = txt, 
+    x = 0.1, y = 1,
+    ax = 0, ay = 0,
+    xref = "paper", yref = "paper", 
+    align = "center",
+    font = list(family = "serif", size = 15, color = "pink"),
+    bgcolor = "#b3b3b3", bordercolor = "green", borderwidth = 2
+  )
+}
+
+axis <- function(txt) {
+  list(
+    title = txt, tickformat = ".0%", tickfont = list(size = 10)
+  )
+}
+
+ternaryAxes <- list(
+  aaxis = axis("Young"), 
+  baxis = axis("Active"), 
+  caxis = axis("Old")
+)
+
+plot_ly(
+  agpop_mutated, 
+  a = ~YOUNG, 
+  b = ~ACTIVE, 
+  c = ~OLD, 
+  color = I("red"), 
+  type = "scatterternary"
+) %>%
+  layout(
+    annotations = label("Ternary Markers"), 
+    ternary = ternaryAxes
+  )
+```
