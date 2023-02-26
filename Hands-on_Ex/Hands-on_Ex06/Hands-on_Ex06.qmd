@@ -1,47 +1,32 @@
----
-title: "Hands-on_Ex06"
-author: "Xu Jiajie"
----
+------------------------------------------------------------------------
 
-```{r}
-attacks <- read_csv("data/eventlog.csv")
+``` {d{r}
 ```
 
 ```{r}
-library(knitr)
-kable(head(attacks))
+pacman::p_load(scales, viridis, lubridate, ggthemes, gridExtra, readxl, knitr, data.table, CGPfunctions, ggHoriPlot, tidyverse)
 ```
 
 ```{r}
-library(lubridate)
+rice <- read_csv("data/rice.csv")
+rice
 ```
 
 ```{r}
-make_hr_wkday <- function(ts, sc, tz) {
-  real_times <- ymd_hms(ts, 
-                        tz = tz[1], 
-                        quiet = TRUE)
-  dt <- data.table(source_country = sc,
-                   wkday = weekdays(real_times),
-                   hour = hour(real_times))
-  return(dt)
-  }
+rice %>% 
+  mutate(Year = factor(Year)) %>%
+  filter(Year %in% c(1961, 1980)) %>%
+  newggslopegraph(Year, Yield, Country,
+                Title = "Rice Yield of Top 11 Asian Counties",
+                SubTitle = "1961-1980",
+                Caption = "Prepared by: Dr. Kam Tin Seong")
 ```
 
 ```{r}
-wkday_levels <- c('Saturday', 'Friday', 
-                  'Thursday', 'Wednesday', 
-                  'Tuesday', 'Monday', 
-                  'Sunday')
+averp <- read_csv("data/AVERP.csv")
+  
+```
 
-attacks <- attacks %>%
-  group_by(tz) %>%
-  do(make_hr_wkday(.$timestamp, 
-                   .$source_country, 
-                   .$tz)) %>% 
-  ungroup() %>% 
-  mutate(wkday = factor(
-    wkday, levels = wkday_levels),
-    hour  = factor(
-      hour, levels = 0:23))
+```{r}
+
 ```

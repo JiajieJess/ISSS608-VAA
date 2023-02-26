@@ -3,25 +3,424 @@ title: "TakeHome_Ex04"
 author: "Xu Jiajie"
 ---
 
-```{r}
-pacman::p_load(ggplot2, tidyverse,readxl)
-```
+#   The Task
+
+1.  In this take home exercise, we need to explore the global economic dynamic during 2020-2022.
+
+2.  Data source:
+    For the purpose of this take-home exercise, Merchandise Trade provided by Department of Statistics, Singapore (DOS) will be used.
+
+# Data challenge
+
+1.  The data series combined continents and countries and we need to seperate what we need to analyse.
+
+2.  The values have different unit of quantity so we need to pay attention do not to confuse.
+
+In order to draw different charts, we need to do data process, which can make sure fit for the requirement.
+
+# Step by step data visualization preparation
+
+1.  Installing and launching R packages
 
 ```{r}
+pacman::p_load(scales, viridis, lubridate, ggthemes, gridExtra, readxl, knitr, data.table, CGPfunctions, ggHoriPlot, tidyverse)
+```
+
+2.  Import data
+
+    Here are two data sheets, T1 is import data and T2 is export data.
+
+```{r}
+#Import
 data1 <- read_excel("data/outputFile.xlsx",sheet='T1',range = 'A10:UT129')
 data1
 ```
 
 ```{r}
+#Export
+data2 <- read_excel("data/outputFile.xlsx",sheet='T2',range = 'A10:UT101')
+data2
+```
+
+3.  Splitting the location name and the unit label.
+
+```{r}
+#import
 data1A <- data1 %>% 
   separate("Data Series", c("Place", "money"), " ")
 data1A
 ```
 
 ```{r}
-  data1A |>
-  select(Place:"2020 Jan") |>
-  filter(money=="(Million") |>
-  head(n=5) |>
-  knitr::kable()
+#export
+dataEA <- data2 %>% 
+  separate("Data Series", c("Place", "money"), " ")
+dataEA
 ```
+
+4.  Filter out the data range from 2020 to 2022 and we find that 5 continents have the same price units so we want to filter out the 5 continents to do the advance analyse.
+
+```{r}
+#import
+data2A <-(data1A %>%
+          mutate(`2023 Jan`=NULL))
+data2A
+```
+
+```{r}
+#export
+dataeA <-(dataEA %>%
+          mutate(`2023 Jan`=NULL))
+dataeA
+```
+
+```{r}
+ #import
+data3A <-(data2A %>%filter(money == "(Million") %>% head)
+data3A
+```
+
+```{r}
+ #export
+data_e <-(dataeA %>%filter(money == "(Million") %>% head)
+data_e
+```
+
+5.  Delete the price unit for easier understanding.
+
+```{r}
+#import
+data4A <-(data3A %>%
+          mutate(money=NULL))
+data4A
+```
+
+```{r}
+#export
+data_e1 <-(data_e %>%
+          mutate(money=NULL))
+data_e1
+```
+
+6.  Filtered out the data that we need to use: 5 continets data from 2020-2022.
+
+```{r}
+#import
+final_data <-(data4A %>%
+           select(Place:'2020 Jan'))
+final_data
+```
+
+```{r}
+#export
+final_data_e <-(data_e1 %>%
+           select(Place:'2020 Jan'))
+final_data_e
+```
+
+7.  In order to draw the cycle plot, we need to do the data frame transpose.
+
+```{r}
+#import
+final_data_long <-(final_data %>%
+    pivot_longer(
+    cols =!Place,
+    names_to = "Date",
+    values_to ="money"
+  ))
+final_data_long
+```
+
+```{r}
+#import
+final_data_long
+```
+
+```{r}
+#import
+final_data_wide <-(final_data_long %>%
+    pivot_wider(
+    names_from =Place,
+    values_from =money
+  ))
+final_data_wide
+```
+
+```{r}
+#export
+final_data_long_e <-(final_data_e %>%
+    pivot_longer(
+    cols =!Place,
+    names_to = "Date",
+    values_to ="money"
+  ))
+final_data_long_e
+```
+
+```{r}
+#export
+final_data_wide_e <-(final_data_long_e %>%
+    pivot_wider(
+    names_from =Place,
+    values_from =money
+  ))
+final_data_wide_e
+```
+
+8.  We need to change the Date column's format.
+
+```{r}
+#import
+final_data_long$`Date` <- as.Date(paste(final_data_long$`Date`, "01"), format = "%Y %b %d")
+final_data_long
+```
+
+```{r}
+#export
+final_data_long_e$`Date` <- as.Date(paste(final_data_long_e$`Date`, "01"), format = "%Y %b %d")
+final_data_long_e
+```
+
+```{r}
+#import
+final_data_wide$`Date` <- as.Date(paste(final_data_wide$`Date`, "01"), format = "%Y %b %d")
+final_data_wide
+```
+
+```{r}
+#export
+final_data_wide_e$`Date` <- as.Date(paste(final_data_wide_e$`Date`, "01"), format = "%Y %b %d")
+final_data_wide_e
+```
+
+9.  Derive 'month ' and 'year' columns for the cycle plot.
+
+```{r}
+#import
+final_data_long$month <- factor(month(final_data_long$`Date`), 
+                    levels=1:12, 
+                    labels=month.abb, 
+                    ordered=TRUE) 
+final_data_long$year <- year(ymd(final_data_long$`Date`))
+final_data_long
+```
+
+```{r}
+#export
+final_data_long_e$month <- factor(month(final_data_long_e$`Date`), 
+                     levels=1:12, 
+                     labels=month.abb, 
+                     ordered=TRUE) 
+final_data_long_e$year <- year(ymd(final_data_long_e$`Date`))
+final_data_long_e
+```
+
+```{r}
+#import
+final_data_long %>%
+  group_by(Place,year) %>%
+  summarise(sum_value=sum(money))
+```
+
+```{r}
+#import
+final_data_wide$month <- factor(month(final_data_wide$`Date`), 
+                    levels=1:12, 
+                    labels=month.abb, 
+                    ordered=TRUE) 
+final_data_wide$year <- year(ymd(final_data_wide$`Date`))
+final_data_wide
+```
+
+```{r}
+#export
+#import
+final_data_wide_e$month <- factor(month(final_data_wide_e$`Date`), 
+                    levels=1:12, 
+                    labels=month.abb, 
+                    ordered=TRUE) 
+final_data_wide_e$year <- year(ymd(final_data_wide_e$`Date`))
+final_data_wide_e
+```
+
+10. Plotting cycle plots in Asia for import and export.
+
+```{r}
+#import
+Asia <- final_data_wide %>% 
+  select(`Asia`, 
+         month, 
+         year) %>%
+  filter(year >= 2020)
+```
+
+```{r}
+#import
+hline.data <- Asia %>% 
+  group_by(month) %>%
+  summarise(avgvalue = mean(`Asia`))
+```
+
+# Plotting cycle plots in Asia
+
+```{r}
+#import
+ggplot() + 
+  geom_line(data=Asia,
+            aes(x=year, 
+                y=`Asia`, 
+                group=month), 
+            colour="black") +
+  geom_hline(aes(yintercept=avgvalue), 
+             data=hline.data, 
+             linetype=3, 
+             colour="red", 
+             size=0.5) + 
+  facet_grid(~month) +
+  labs(axis.text.x = element_blank(),
+       title = "Import data in Asia continent, 2020-2022") +
+  xlab("") +
+  ylab("No. of Visitors")
+```
+
+```{r}
+#export
+Asia <- final_data_wide_e %>% 
+  select(`Asia`, 
+         month, 
+         year) %>%
+  filter(year >= 2020)
+```
+
+```{r}
+#export
+hline.data <- Asia %>% 
+  group_by(month) %>%
+  summarise(avgvalue = mean(`Asia`))
+```
+
+```{r}
+#export
+ggplot() + 
+  geom_line(data=Asia,
+            aes(x=year, 
+                y=`Asia`, 
+                group=month), 
+            colour="black") +
+  geom_hline(aes(yintercept=avgvalue), 
+             data=hline.data, 
+             linetype=3, 
+             colour="red", 
+             size=0.5) + 
+  facet_grid(~month) +
+  labs(axis.text.x = element_blank(),
+       title = "Export data in Asia continent, 2020-2022") +
+  xlab("") +
+  ylab("No. of Visitors")
+```
+
+# Plotting Slopegraph
+
+```{r}
+#import
+library(ggplot2)
+
+final_data_long %>% 
+  group_by(Place, year) %>%
+  summarise(sum_value=sum(money)) %>%
+  mutate(Year = factor(year)) %>%
+  filter(Year %in% c(2020, 2022)) %>%
+  newggslopegraph(Year, sum_value, Place,
+                Title = "Money of 5 Continents for import",
+                SubTitle = "2020-2022",
+                Caption = "Prepared by:Xu Jiajie")
+```
+
+```{r}
+#export
+final_data_long_e %>% 
+  group_by(Place, year) %>%
+  summarise(sum_value=sum(money)) %>%
+  mutate(Year = factor(year)) %>%
+  filter(Year %in% c(2020, 2022)) %>%
+  newggslopegraph(Year, sum_value, Place,
+                Title = "Money of 5 Continents for export",
+                SubTitle = "2020-2022",
+                Caption = "Prepared by:Xu Jiajie")
+```
+
+12. Plotting Horizon Plot
+
+    We need to calculate the trade gap between import and export and then to draw the horizon plot. Here is the step to calculate the trade gap.
+
+    ```{r}
+    final_export <-final_data_long_e
+    final_export
+    ```
+
+```{r}
+colnames(final_export) <-c('Place','Date','export_value','month','year')
+final_export
+```
+
+13. See every continent's export amount.
+
+    ```{r}
+    merge_trade <-merge(final_data_long,final_export,by='year')
+    merge_trade
+
+    ```
+
+```{r}
+merge_trade$gap <- merge_trade$export_value - merge_trade$money
+merge_trade
+```
+
+14. Calculated the trade gap.
+
+```{r}
+merge_trade <- merge_trade %>%
+  group_by(year)
+merge_trade
+```
+
+# **Plotting the horizon graph**
+
+```{r}
+merge_trade %>% 
+  ggplot() +
+  geom_horizon(aes(x = Date.x, y=gap), 
+               origin = "midpoint", 
+               horizonscale = 6)+
+  facet_grid(`Place.x`~.) +
+    theme_few() +
+  scale_fill_hcl(palette = 'RdBu') +
+  theme(panel.spacing.y=unit(0, "lines"), strip.text.y = element_text(
+    size = 5, angle = 0, hjust = 0),
+    legend.position = 'none',
+    axis.text.y = element_blank(),
+    axis.text.x = element_text(size=7),
+    axis.title.y = element_blank(),
+    axis.title.x = element_blank(),
+    axis.ticks.y = element_blank(),
+    panel.border = element_blank()
+    ) +
+    scale_x_date(expand=c(0,0), date_breaks = "3 month", date_labels = "%b%y") +
+  ggtitle('Trade gap (Jan 2020 to Dec 2022)')
+```
+
+# Insight
+
+1.  Comparing the cycle plots of export and import in Asia, we can see the import values are below 3500 million dollars but export values are higher than 3500 million dollars.
+
+2.  April and May have low export and import values in Asia.
+
+3.  The export and import value almost keep increased from 2020 to 2022.
+
+4.  from the slopegraph of import, we can see Asia has the top increase speed and the biggest trade value for import and export during 2020 to 2022.
+
+5.  As for import, Europe's value is higher than America , Oceania is higher than Africa.
+
+    As for export,America's value is higher than Europe and Oceania is also higher than Africa.
+
+6.  From the horizon graph, we can see the trade gap from 2020 to 2022. Light red means deficit and dark red means surplus.
