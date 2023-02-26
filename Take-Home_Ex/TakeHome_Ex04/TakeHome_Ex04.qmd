@@ -282,7 +282,7 @@ ggplot() +
   labs(axis.text.x = element_blank(),
        title = "Import data in Asia continent, 2020-2022") +
   xlab("") +
-  ylab("No. of Visitors")
+  ylab("Money")
 ```
 
 ```{r}
@@ -318,7 +318,7 @@ ggplot() +
   labs(axis.text.x = element_blank(),
        title = "Export data in Asia continent, 2020-2022") +
   xlab("") +
-  ylab("No. of Visitors")
+  ylab("Money")
 ```
 
 # Plotting Slopegraph
