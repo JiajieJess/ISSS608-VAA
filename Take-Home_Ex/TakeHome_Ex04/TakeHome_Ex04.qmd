@@ -425,4 +425,4 @@ merge_trade %>%
 
     As for export,America's value is higher than Europe and Oceania is also higher than Africa.
 
-6.  From the horizon graph, we can see the trade gap from 2020 to 2022. Light red means deficit and dark red means surplus .
+6.  From the horizon graph, we can see the trade gap from 2020 to 2022. Light red means deficit and dark red means surplus.
