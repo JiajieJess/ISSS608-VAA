@@ -20,6 +20,8 @@ In order to draw different charts, we need to do data process, which can make su
 
 # Step by step data visualization preparation
 
+Here we study the 5 continents trade situation during 2020-2022.
+
 1.  Installing and launching R packages
 
 ```{r}
