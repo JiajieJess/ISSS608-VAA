@@ -3,12 +3,11 @@ title: "TakeHome_Ex04"
 author: "Xu Jiajie"
 ---
 
-#   The Task
+# The Task
 
 1.  In this take home exercise, we need to explore the global economic dynamic during 2020-2022.
 
-2.  Data source:
-    For the purpose of this take-home exercise, Merchandise Trade provided by Department of Statistics, Singapore (DOS) will be used.
+2.  Data source: For the purpose of this take-home exercise, Merchandise Trade provided by Department of Statistics, Singapore (DOS) will be used.
 
 # Data challenge
 
@@ -195,7 +194,7 @@ final_data_wide_e$`Date` <- as.Date(paste(final_data_wide_e$`Date`, "01"), forma
 final_data_wide_e
 ```
 
-9.  Derive 'month ' and 'year' columns for the cycle plot.
+9.  Derive 'month' and 'year' columns for the cycle plot.
 
 ```{r}
 #import
